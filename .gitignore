@@ -1,0 +1,46 @@
+# Build results
+bin/
+obj/
+out/
+
+# Visual Studio / Rider
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userprefs
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+logs/
+*.log
+
+# Environment
+.env
+appsettings.Development.json
+appsettings.Local.json
+
+# Packages
+*.nupkg
+*.snupkg
+packages/
+
+# JetBrains Rider
+.idea/
+*.sln.iml
