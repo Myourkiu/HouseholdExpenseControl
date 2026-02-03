@@ -29,12 +29,14 @@ public class PersonService : IPersonService
         return Result.Success(dto);
     }
 
-    // Retorna todas as pessoas cadastradas
-    public async Task<Result<IEnumerable<PersonDto>>> GetAllAsync()
+    // Busca todas as pessoas paginadas
+    public async Task<Result<PaginatedResponse<PersonDto>>> GetAllAsync(int page, int pageSize)
     {
-        var persons = await _personRepository.GetAllAsync();
-        var dtos = persons.Select(person => new PersonDto(person.Id, person.Name, person.Age));
-        return Result.Success(dtos);
+        var totalCount = await _personRepository.CountAsync();
+        var persons = await _personRepository.GetPagedAsync(page, pageSize);
+        var dtos = persons.Select(p => new PersonDto(p.Id, p.Name, p.Age));
+        var response = new PaginatedResponse<PersonDto>(dtos, page, pageSize, totalCount);
+        return Result.Success(response);
     }
 
     // Cria uma nova pessoa validando as regras de negócio

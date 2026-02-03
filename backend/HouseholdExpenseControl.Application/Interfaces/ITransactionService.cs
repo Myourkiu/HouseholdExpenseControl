@@ -6,6 +6,6 @@ namespace HouseholdExpenseControl.Application.Interfaces;
 public interface ITransactionService
 {
     Task<Result<TransactionDto>> GetByIdAsync(Guid id);
-    Task<Result<IEnumerable<TransactionDto>>> GetAllAsync();
+    Task<Result<PaginatedResponse<TransactionDto>>> GetAllAsync(int page, int pageSize);
     Task<Result<TransactionDto>> CreateAsync(CreateTransactionDto dto);
 }

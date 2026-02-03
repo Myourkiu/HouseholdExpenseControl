@@ -16,9 +16,12 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
-        var result = await _categoryService.GetAllAsync();
+        if (page < 1) page = 1;
+        if (pageSize < 1 || pageSize > 100) pageSize = 10;
+
+        var result = await _categoryService.GetAllAsync(page, pageSize);
 
         if (result.IsFailure)
             return StatusCode(result.StatusCode, new { error = result.Error });

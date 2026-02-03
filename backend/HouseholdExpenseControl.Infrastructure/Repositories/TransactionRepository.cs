@@ -24,13 +24,29 @@ public class TransactionRepository : ITransactionRepository
             .FirstOrDefaultAsync(t => t.Id == id);
     }
 
-    // Retorna todas as transações trazendo também pessoa e categoria
     public async Task<IEnumerable<Transaction>> GetAllAsync()
     {
         return await _context.Transactions
             .Include(t => t.Person)
             .Include(t => t.Category)
             .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Transaction>> GetPagedAsync(int page, int pageSize)
+    {
+        var skip = (page - 1) * pageSize;
+        return await _context.Transactions
+            .Include(t => t.Person)
+            .Include(t => t.Category)
+            .OrderBy(t => t.Id)
+            .Skip(skip)
+            .Take(pageSize)
+            .ToListAsync();
+    }
+
+    public async Task<int> CountAsync()
+    {
+        return await _context.Transactions.CountAsync();
     }
 
     // Adiciona uma nova transação no banco

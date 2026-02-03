@@ -44,10 +44,11 @@ public class TransactionService : ITransactionService
         return Result.Success(dto);
     }
 
-    // Retorna todas as transações cadastradas
-    public async Task<Result<IEnumerable<TransactionDto>>> GetAllAsync()
+    // Busca todas as transações paginadas
+    public async Task<Result<PaginatedResponse<TransactionDto>>> GetAllAsync(int page, int pageSize)
     {
-        var transactions = await _transactionRepository.GetAllAsync();
+        var totalCount = await _transactionRepository.CountAsync();
+        var transactions = await _transactionRepository.GetPagedAsync(page, pageSize);
         var dtos = transactions.Select(t => new TransactionDto(
             t.Id,
             t.Description,
@@ -55,10 +56,11 @@ public class TransactionService : ITransactionService
             t.Type,
             t.CategoryId,
             t.PersonId));
-
-        return Result.Success(dtos);
+        var response = new PaginatedResponse<TransactionDto>(dtos, page, pageSize, totalCount);
+        return Result.Success(response);
     }
 
+    // Cria uma nova transação
     public async Task<Result<TransactionDto>> CreateAsync(CreateTransactionDto dto)
     {
         try

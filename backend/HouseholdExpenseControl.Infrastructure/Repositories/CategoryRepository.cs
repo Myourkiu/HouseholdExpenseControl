@@ -21,10 +21,24 @@ public class CategoryRepository : ICategoryRepository
         return await _context.Categories.FindAsync(id);
     }
 
-    // Retorna todas as categorias do banco
     public async Task<IEnumerable<Category>> GetAllAsync()
     {
         return await _context.Categories.ToListAsync();
+    }
+
+    public async Task<IEnumerable<Category>> GetPagedAsync(int page, int pageSize)
+    {
+        var skip = (page - 1) * pageSize;
+        return await _context.Categories
+            .OrderBy(c => c.Description)
+            .Skip(skip)
+            .Take(pageSize)
+            .ToListAsync();
+    }
+
+    public async Task<int> CountAsync()
+    {
+        return await _context.Categories.CountAsync();
     }
 
     // Adiciona uma nova categoria no banco

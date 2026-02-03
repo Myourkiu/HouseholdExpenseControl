@@ -21,10 +21,24 @@ public class PersonRepository : IPersonRepository
         return await _context.Persons.FindAsync(id);
     }
 
-    // Retorna todas as pessoas do banco
     public async Task<IEnumerable<Person>> GetAllAsync()
     {
         return await _context.Persons.ToListAsync();
+    }
+
+    public async Task<IEnumerable<Person>> GetPagedAsync(int page, int pageSize)
+    {
+        var skip = (page - 1) * pageSize;
+        return await _context.Persons
+            .OrderBy(p => p.Name)
+            .Skip(skip)
+            .Take(pageSize)
+            .ToListAsync();
+    }
+
+    public async Task<int> CountAsync()
+    {
+        return await _context.Persons.CountAsync();
     }
 
     // Adiciona uma nova pessoa no banco

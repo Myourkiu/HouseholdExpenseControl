@@ -28,13 +28,14 @@ public class CategoryService : ICategoryService
         var dto = new CategoryDto(category.Id, category.Description, category.Purpose);
         return Result.Success(dto);
     }
-
-    // Retorna todas as categorias cadastradas
-    public async Task<Result<IEnumerable<CategoryDto>>> GetAllAsync()
+    // Busca todas as categorias paginadas
+    public async Task<Result<PaginatedResponse<CategoryDto>>> GetAllAsync(int page, int pageSize)
     {
-        var categories = await _categoryRepository.GetAllAsync();
+        var totalCount = await _categoryRepository.CountAsync();
+        var categories = await _categoryRepository.GetPagedAsync(page, pageSize);
         var dtos = categories.Select(c => new CategoryDto(c.Id, c.Description, c.Purpose));
-        return Result.Success(dtos);
+        var response = new PaginatedResponse<CategoryDto>(dtos, page, pageSize, totalCount);
+        return Result.Success(response);
     }
 
     // Cria uma nova categoria validando as regras de negócio
