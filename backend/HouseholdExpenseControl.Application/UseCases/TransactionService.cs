@@ -1,4 +1,6 @@
 using HouseholdExpenseControl.Application.Common;
+using HouseholdExpenseControl.Application.DTOs.Category;
+using HouseholdExpenseControl.Application.DTOs.Person;
 using HouseholdExpenseControl.Application.DTOs.Transaction;
 using HouseholdExpenseControl.Application.Interfaces;
 using HouseholdExpenseControl.Domain.Entities;
@@ -38,8 +40,8 @@ public class TransactionService : ITransactionService
             transaction.Description,
             transaction.Value.Amount,
             transaction.Type,
-            transaction.CategoryId,
-            transaction.PersonId);
+            new CategoryDto(transaction.Category.Id, transaction.Category.Description, transaction.Category.Purpose),
+            new PersonDto(transaction.Person.Id, transaction.Person.Name, transaction.Person.Age));
 
         return Result.Success(dto);
     }
@@ -54,8 +56,8 @@ public class TransactionService : ITransactionService
             t.Description,
             t.Value.Amount,
             t.Type,
-            t.CategoryId,
-            t.PersonId));
+            new CategoryDto(t.Category.Id, t.Category.Description, t.Category.Purpose),
+            new PersonDto(t.Person.Id, t.Person.Name, t.Person.Age)));
         var response = new PaginatedResponse<TransactionDto>(dtos, page, pageSize, totalCount);
         return Result.Success(response);
     }
@@ -97,8 +99,8 @@ public class TransactionService : ITransactionService
                 created.Description,
                 created.Value.Amount,
                 created.Type,
-                created.CategoryId,
-                created.PersonId);
+                new CategoryDto(category.Id, category.Description, category.Purpose),
+                new PersonDto(person.Id, person.Name, person.Age));
 
             return Result.Success(result);
         }
