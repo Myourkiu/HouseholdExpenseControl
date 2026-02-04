@@ -144,6 +144,9 @@ Money garante que valores monetários sempre sejam válidos e positivos.
 
 ## Configuração e Execução
 
+### PS: appsettings.json
+O appsettings foi deixado de fora do gitignore propositalmente a fim de facilitar o teste local.
+
 ### Banco de Dados
 O sistema usa PostgreSQL via Docker Compose. Para iniciar:
 
